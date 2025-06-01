@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">    <meta name="description" content="ระบบบัญชีรายรับรายจ่าย จัดการกำไรขาดทุนของธุรกิจ" />
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#7c3aed" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="บัญชีธุรกิจ">
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <title>ระบบบัญชีธุรกิจ</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    
+    <style>
+      body {
+        font-family: "Kanit", sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      
+      /* PWA install prompt */
+      .install-prompt {
+        display: none;
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 16px 24px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        z-index: 1000;
+        animation: slideUp 0.5s ease-out;
+      }
+      
+      @keyframes slideUp {
+        from { transform: translate(-50%, 100px); opacity: 0; }
+        to { transform: translate(-50%, 0); opacity: 1; }
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    
+    <!-- PWA Install Prompt (optional) -->
+    <div id="installPrompt" class="install-prompt">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span style="font-size: 24px;">📱</span>
+        <div>
+          <div style="font-weight: 600;">ติดตั้งแอพบัญชีธุรกิจ</div>
+          <div style="font-size: 14px; opacity: 0.9;">ใช้งานได้เหมือนแอพจริง!</div>
+        </div>
+        <button 
+          id="installBtn" 
+          style="background: white; color: #7c3aed; padding: 8px 16px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; margin-left: 16px;"
+          onclick="installPWA()"
+        >
+          ติดตั้ง
+        </button>
+      </div>
+    </div>
+    
+    <script>
+      // PWA Install Prompt Handler
+      let deferredPrompt;
+      
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        // Show install prompt
+        document.getElementById('installPrompt').style.display = 'block';
+      });
+      
+      function installPWA() {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+              console.log('User accepted the install prompt');
+            }
+            deferredPrompt = null;
+            document.getElementById('installPrompt').style.display = 'none';
+          });
+        }
+      }
+      
+      // Hide prompt if already installed
+      window.addEventListener('appinstalled', () => {
+        document.getElementById('installPrompt').style.display = 'none';
+      });
+    </script>
+  </body>
+</html>
